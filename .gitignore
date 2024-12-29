@@ -397,3 +397,5 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 /BookManager/obj
+BookManager/obj/Debug/net8.0/BookManager.AssemblyInfo.cs
+BookManager/obj/Debug/net8.0/BookManager.AssemblyInfoInputs.cache
