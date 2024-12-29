@@ -5,9 +5,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IBookService, BookService>();
@@ -15,17 +13,16 @@ builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddDbContext<BookDbContext>(options =>
     options.UseInMemoryDatabase("BookDb"));
 
+// Configure CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+        policy.AllowAnyOrigin()   // Allow all origins
+              .AllowAnyMethod()   // Allow all HTTP methods (GET, POST, etc.)
+              .AllowAnyHeader();  // Allow all headers
     });
 });
-
-
 
 var app = builder.Build();
 
@@ -36,9 +33,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// Apply CORS policy before other middleware
+app.UseCors("AllowAll");  // This should be placed here
 
-app.UseAuthorization();
+app.UseHttpsRedirection(); // Redirect HTTP to HTTPS
+app.UseAuthorization();    // Enable authorization
 
 app.MapControllers();
 
